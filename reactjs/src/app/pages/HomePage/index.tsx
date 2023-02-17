@@ -38,7 +38,7 @@ export function HomePage() {
       <NavBar />
       <PageWrapper style={{ height: '100%' }}>
         {/* <GradientChart data={data} /> */}
-        <VictoryChartCustom />
+        {/* <VictoryChartCustom /> */}
         <ConvertSvgReactNative />
         {/* <Masthead />
         <Features /> */}
