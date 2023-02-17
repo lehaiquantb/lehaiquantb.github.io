@@ -10,13 +10,136 @@ import { javascript } from '@codemirror/lang-javascript';
 import { uniqueId } from 'lodash';
 import prettier from 'prettier';
 import prettierPlugin from 'prettier/parser-babel';
-const svgCode = `
-<svg xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink">
-  <rect x="10" y="10" height="100" width="100"
-    style="stroke:#ff0000; fill: #0000ff"/>
-</svg>
-`;
+// const svgCode = `
+// <svg xmlns="http://www.w3.org/2000/svg"
+//   xmlns:xlink="http://www.w3.org/1999/xlink">
+//   <rect x="10" y="10" height="100" width="100"
+//     style="stroke:#ff0000; fill: #0000ff"/>
+// </svg>
+// `;
+
+const converters = [
+  {
+    key: 'path',
+    value: 'Path',
+  },
+  {
+    key: 'circle',
+    value: 'Circle',
+  },
+  {
+    key: 'image',
+    value: 'Image',
+  },
+  {
+    key: 'defs',
+    value: 'Defs',
+  },
+  {
+    key: 'clip-path',
+    value: 'ClipPath',
+  },
+  {
+    key: 'shape',
+    value: 'Shape',
+  },
+  {
+    key: 'line',
+    value: 'Line',
+  },
+  {
+    key: 'rect',
+    value: 'Rect',
+  },
+  {
+    key: 'g',
+    value: 'G',
+  },
+  {
+    key: 'polygon',
+    value: 'Polygon',
+  },
+  {
+    key: 'polyline',
+    value: 'Polyline',
+  },
+  {
+    key: 'ellipse',
+    value: 'Ellipse',
+  },
+  {
+    key: 'text',
+    value: 'Text',
+  },
+  {
+    key: 'tspan',
+    value: 'TSpan',
+  },
+  {
+    key: 'symbol',
+    value: 'Symbol',
+  },
+  {
+    key: 'use',
+    value: 'Use',
+  },
+  {
+    key: 'linearGradient',
+    value: 'LinearGradient',
+  },
+  {
+    key: 'radialGradient',
+    value: 'RadialGradient',
+  },
+  {
+    key: 'stop',
+    value: 'Stop',
+  },
+  {
+    key: 'pattern',
+    value: 'Pattern',
+  },
+  {
+    key: 'mask',
+    value: 'Mask',
+  },
+  {
+    key: 'filter',
+    value: 'Filter',
+  },
+  {
+    key: 'feBlend',
+    value: 'FeBlend',
+  },
+  {
+    key: 'feColorMatrix',
+    value: 'FeColorMatrix',
+  },
+  {
+    key: 'feComponentTransfer',
+    value: 'FeComponentTransfer',
+  },
+  {
+    key: 'feComposite',
+    value: 'FeComposite',
+  },
+  {
+    key: 'feConvolveMatrix',
+    value: 'FeConvolveMatrix',
+  },
+  {
+    key: 'feDiffuseLighting',
+    value: 'FeDiffuseLighting',
+  },
+  {
+    key: 'feDisplacementMap',
+    value: 'FeDisplacementMap',
+  },
+  {
+    key: 'feDistantLight',
+    value: 'FeDistantLight',
+  },
+];
 
 export const SvgImage = ({ text }) => {
   return (
@@ -46,7 +169,11 @@ export const ConvertSvgReactNative = () => {
   // }, []);
 
   const [items, setItems] = useState<SvgItem[]>([]);
-  console.log(items);
+  // console.log(items);
+
+  useEffect(() => {
+    console.log('items', items);
+  }, [items]);
 
   const editorView = useRef<EditorView>();
   const fileRef = useRef<HTMLInputElement>(null);
@@ -55,7 +182,7 @@ export const ConvertSvgReactNative = () => {
   const isMap = useRef<boolean>(false);
 
   useEffect(() => {
-    console.log('idMap', idMapText);
+    // console.log('idMap', idMapText);
 
     if (
       Object.keys(idMapText).length === items.length &&
@@ -67,7 +194,7 @@ export const ConvertSvgReactNative = () => {
         item.rawText = idMapText?.[item.id] ?? '';
       }
       isMap.current = true;
-      setItems(items);
+      setItems(clone);
     }
   }, [idMapText, items]);
 
@@ -81,6 +208,8 @@ export const ConvertSvgReactNative = () => {
   }, []);
 
   const onConvert = () => {
+    // console.log('go convert');
+
     for (const item of items) {
       const json: any = {
         code: item.rawText,
@@ -126,132 +255,14 @@ export const ConvertSvgReactNative = () => {
         });
         const content: string = (await rawResponse.json())?.output ?? '';
         // debugger;
-        const converters = [
-          {
-            key: 'path',
-            value: 'Path',
-          },
-          {
-            key: 'circle',
-            value: 'Circle',
-          },
-          {
-            key: 'image',
-            value: 'Image',
-          },
-          {
-            key: 'defs',
-            value: 'Defs',
-          },
-          {
-            key: 'clip-path',
-            value: 'ClipPath',
-          },
-          {
-            key: 'shape',
-            value: 'Shape',
-          },
-          {
-            key: 'line',
-            value: 'Line',
-          },
-          {
-            key: 'rect',
-            value: 'Rect',
-          },
-          {
-            key: 'g',
-            value: 'G',
-          },
-          {
-            key: 'polygon',
-            value: 'Polygon',
-          },
-          {
-            key: 'polyline',
-            value: 'Polyline',
-          },
-          {
-            key: 'ellipse',
-            value: 'Ellipse',
-          },
-          {
-            key: 'text',
-            value: 'Text',
-          },
-          {
-            key: 'tspan',
-            value: 'TSpan',
-          },
-          {
-            key: 'symbol',
-            value: 'Symbol',
-          },
-          {
-            key: 'use',
-            value: 'Use',
-          },
-          {
-            key: 'linearGradient',
-            value: 'LinearGradient',
-          },
-          {
-            key: 'radialGradient',
-            value: 'RadialGradient',
-          },
-          {
-            key: 'stop',
-            value: 'Stop',
-          },
-          {
-            key: 'pattern',
-            value: 'Pattern',
-          },
-          {
-            key: 'mask',
-            value: 'Mask',
-          },
-          {
-            key: 'filter',
-            value: 'Filter',
-          },
-          {
-            key: 'feBlend',
-            value: 'FeBlend',
-          },
-          {
-            key: 'feColorMatrix',
-            value: 'FeColorMatrix',
-          },
-          {
-            key: 'feComponentTransfer',
-            value: 'FeComponentTransfer',
-          },
-          {
-            key: 'feComposite',
-            value: 'FeComposite',
-          },
-          {
-            key: 'feConvolveMatrix',
-            value: 'FeConvolveMatrix',
-          },
-          {
-            key: 'feDiffuseLighting',
-            value: 'FeDiffuseLighting',
-          },
-          {
-            key: 'feDisplacementMap',
-            value: 'FeDisplacementMap',
-          },
-          {
-            key: 'feDistantLight',
-            value: 'FeDistantLight',
-          },
-        ];
 
         const existTags: string[] = [];
-
-        let inner = content.split('{...props}>')?.[1]?.split('</svg>')?.[0];
+        // console.log('content', content);
+        // debugger;
+        let inner = content
+          .split(new RegExp(`<svg[^>]*>`, 'g'))?.[1]
+          ?.split('</svg>')?.[0];
+        // console.log('inner', inner);
 
         if (!inner) {
           return;
@@ -309,13 +320,16 @@ export const ConvertSvgReactNative = () => {
 
         setItems(items => {
           const clone = [...items];
+          // console.log('onConvert', clone);
+          // console.log('result', template);
+
           const index = clone.findIndex(_i => _i.id === item.id);
           if (index !== -1) {
             clone[index].resultText = template;
           }
           return clone;
         });
-        console.log(inner);
+        // console.log(inner);
       })();
     }
   };
@@ -358,7 +372,7 @@ export const ConvertSvgReactNative = () => {
         });
       }
     }
-    setItems(is);
+    setItems(is?.slice());
   };
 
   return (
