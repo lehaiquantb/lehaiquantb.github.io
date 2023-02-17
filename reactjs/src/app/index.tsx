@@ -29,8 +29,8 @@ export function App() {
       </Helmet>
 
       <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="*" element={<NotFoundPage />} />
+        <Route path="*" element={<HomePage />} />
+        {/* <Route path="*" element={<NotFoundPage />} /> */}
       </Routes>
       <GlobalStyle />
     </BrowserRouter>

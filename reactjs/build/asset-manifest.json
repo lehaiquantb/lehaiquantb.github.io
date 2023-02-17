@@ -1,17 +1,16 @@
 {
   "files": {
-    "main.css": "/static/css/main.f51d5156.css",
-    "main.js": "/static/js/main.4d9b1221.js",
-    "static/js/316.d1e8ab39.chunk.js": "/static/js/316.d1e8ab39.chunk.js",
-    "static/js/977.855b224f.chunk.js": "/static/js/977.855b224f.chunk.js",
-    "static/js/27.d932e9b1.chunk.js": "/static/js/27.d932e9b1.chunk.js",
-    "static/js/810.aba79ce1.chunk.js": "/static/js/810.aba79ce1.chunk.js",
-    "static/media/github-icon.svg": "/static/media/github-icon.cc72f0952f8f5179b4c3406bed5fb8cc.svg",
-    "index.html": "/index.html",
-    "static/media/documentation-icon.svg": "/static/media/documentation-icon.29cd96c7190f88435b9e45406422a083.svg"
+    "main.css": "/reactjs/build/static/css/main.f51d5156.css",
+    "main.js": "/reactjs/build/static/js/main.8a5227e9.js",
+    "static/js/150.b3d6c8e9.chunk.js": "/reactjs/build/static/js/150.b3d6c8e9.chunk.js",
+    "static/js/27.d932e9b1.chunk.js": "/reactjs/build/static/js/27.d932e9b1.chunk.js",
+    "static/js/810.79b239cf.chunk.js": "/reactjs/build/static/js/810.79b239cf.chunk.js",
+    "static/media/github-icon.svg": "/reactjs/build/static/media/github-icon.cc72f0952f8f5179b4c3406bed5fb8cc.svg",
+    "index.html": "/reactjs/build/index.html",
+    "static/media/documentation-icon.svg": "/reactjs/build/static/media/documentation-icon.29cd96c7190f88435b9e45406422a083.svg"
   },
   "entrypoints": [
     "static/css/main.f51d5156.css",
-    "static/js/main.4d9b1221.js"
+    "static/js/main.8a5227e9.js"
   ]
 }
