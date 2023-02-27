@@ -157,6 +157,93 @@ type SvgItem = {
   name: string;
 };
 
+const convertToReactNative = (content: string, item: SvgItem) => {
+  const existTags: string[] = [];
+  // console.log('content', content);
+  // debugger;
+  let inner = content
+    .split(new RegExp(`<svg[^>]*>`, 'g'))?.[1]
+    ?.split('</svg>')?.[0];
+  // console.log('inner', inner);
+
+  if (!inner) {
+    return;
+  }
+
+  converters.forEach(converter => {
+    const reg = new RegExp(`<${converter.key}`, 'g');
+    const reg2 = new RegExp(`</${converter.key}>`, 'g');
+    if (inner.match(reg) || inner.match(reg2)) {
+      existTags.push(converter.value);
+    }
+    inner = inner?.replace(reg, `<${converter.value}`);
+    inner = inner?.replace(reg2, `</${converter.value}>`);
+  });
+
+  const importText = existTags.join(', ');
+  const IconName = item?.name?.trim()?.replaceAll(' ', '') ?? '';
+
+  const template1 = `
+  import React, { FC } from 'react';
+  import { Svg, ${importText} } from 'react-native-svg';
+  
+  import { IconSvgProps } from 'global';
+  
+  const ${IconName}Icon: FC<IconSvgProps> = (props: IconSvgProps) => {
+    const { size, svgStyle, ...rest } = props;
+  
+    return <Svg width={size} height={size} fill="none" style={svgStyle} {...rest}>
+      ${inner}
+    </Svg>;
+  };
+  
+  ${IconName}Icon.defaultProps = {
+    size: 32,
+    tintColor: 'white',
+  };
+
+  export default ${IconName}Icon;
+  `;
+
+  const template2 = `
+  import React, { FC } from 'react';
+  import { Svg, ${importText} } from 'react-native-svg';
+  
+  import { IconSvgProps } from '';
+  
+  const ${IconName}Icon: FC<IconSvgProps> = (props: IconSvgProps) => {
+    const { size, ...rest } = props;
+  
+    return <Svg width={size} height={size} fill="none" {...rest}>
+      ${inner}
+    </Svg>;
+  };
+  
+  ${IconName}Icon.defaultProps = {
+    size: 32,
+    tintColor: 'white',
+  };
+
+  export default ${IconName}Icon;
+  `;
+
+  const text = prettier.format(template1, {
+    arrowParens: 'avoid',
+    bracketSameLine: false,
+    bracketSpacing: true,
+    singleQuote: true,
+    trailingComma: 'all',
+    printWidth: 100,
+    tabWidth: 2,
+    useTabs: false,
+    endOfLine: 'auto',
+    parser: 'babel',
+    plugins: [prettierPlugin],
+  });
+
+  return text;
+};
+
 export const ConvertSvgReactNative = () => {
   // useEffect(() => {
   //   const jsCode = (async () =>
@@ -256,80 +343,21 @@ export const ConvertSvgReactNative = () => {
         const content: string = (await rawResponse.json())?.output ?? '';
         // debugger;
 
-        const existTags: string[] = [];
-        // console.log('content', content);
-        // debugger;
-        let inner = content
-          .split(new RegExp(`<svg[^>]*>`, 'g'))?.[1]
-          ?.split('</svg>')?.[0];
-        // console.log('inner', inner);
-
-        if (!inner) {
-          return;
-        }
-
-        converters.forEach(converter => {
-          const reg = new RegExp(`<${converter.key}`, 'g');
-          const reg2 = new RegExp(`</${converter.key}>`, 'g');
-          if (inner.match(reg) || inner.match(reg2)) {
-            existTags.push(converter.value);
-          }
-          inner = inner?.replace(reg, `<${converter.value}`);
-          inner = inner?.replace(reg2, `</${converter.value}>`);
-        });
-
-        const importText = existTags.join(', ');
-
-        let template = `
-        import React, { FC } from 'react';
-        import { Svg, ${importText} } from 'react-native-svg';
-        
-        import { IconSvgProps } from 'global';
-        
-        const ${item.name}Icon: FC<IconSvgProps> = (props: IconSvgProps) => {
-          const { size, svgStyle, ...rest } = props;
-        
-          return <Svg width={size} height={size} fill="none" style={svgStyle} {...rest}>
-            ${inner}
-          </Svg>;
-        };
-        
-        ${item.name}Icon.defaultProps = {
-          size: 32,
-          tintColor: 'white',
-        };
-
-        export default ${item.name}Icon;
-        `;
-
+        const result = convertToReactNative(content, item);
         // prettier
 
-        template = prettier.format(template, {
-          arrowParens: 'avoid',
-          bracketSameLine: false,
-          bracketSpacing: true,
-          singleQuote: true,
-          trailingComma: 'all',
-          printWidth: 100,
-          tabWidth: 2,
-          useTabs: false,
-          endOfLine: 'auto',
-          parser: 'babel',
-          plugins: [prettierPlugin],
-        });
+        result &&
+          setItems(items => {
+            const clone = [...items];
+            // console.log('onConvert', clone);
+            // console.log('result', result);
 
-        setItems(items => {
-          const clone = [...items];
-          // console.log('onConvert', clone);
-          // console.log('result', template);
-
-          const index = clone.findIndex(_i => _i.id === item.id);
-          if (index !== -1) {
-            clone[index].resultText = template;
-          }
-          return clone;
-        });
-        // console.log(inner);
+            const index = clone.findIndex(_i => _i.id === item.id);
+            if (index !== -1) {
+              clone[index].resultText = result;
+            }
+            return clone;
+          });
       })();
     }
   };
@@ -338,7 +366,7 @@ export const ConvertSvgReactNative = () => {
     const clone = items.slice();
     const i = clone.findIndex(c => c.id === id);
     if (i !== -1) {
-      clone[i].name = (e.target as any)?.value;
+      clone[i].name = ((e.target as any)?.value as string) ?? '';
     }
     setItems(clone);
   };
@@ -368,7 +396,7 @@ export const ConvertSvgReactNative = () => {
           rawText: '',
           resultText: '',
           file,
-          name: file?.name?.split('.')?.[0] ?? '',
+          name: file?.name?.split('.')?.[0]?.replaceAll(' ', '') ?? '',
         });
       }
     }
@@ -411,7 +439,10 @@ export const ConvertSvgReactNative = () => {
                       type: 'text/plain',
                     });
                     element.href = URL.createObjectURL(file);
-                    element.download = `${item.name}Icon.tsx`;
+                    element.download = `${item.name?.replaceAll(
+                      ' ',
+                      '',
+                    )}Icon.tsx`;
                     document.body.appendChild(element); // Required for this to work in FireFox
                     element.click();
                   }}

@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/reactjs/build/static/css/main.f51d5156.css",
-    "main.js": "/reactjs/build/static/js/main.17529b1f.js",
-    "static/js/25.0d70f07b.chunk.js": "/reactjs/build/static/js/25.0d70f07b.chunk.js",
+    "main.js": "/reactjs/build/static/js/main.0fc792a9.js",
+    "static/js/25.131f8022.chunk.js": "/reactjs/build/static/js/25.131f8022.chunk.js",
     "static/js/27.d932e9b1.chunk.js": "/reactjs/build/static/js/27.d932e9b1.chunk.js",
     "static/js/916.ec234a67.chunk.js": "/reactjs/build/static/js/916.ec234a67.chunk.js",
     "static/media/github-icon.svg": "/reactjs/build/static/media/github-icon.a30c89fe710cde711c4ed8ef5efb0269.svg",
@@ -11,6 +11,6 @@
   },
   "entrypoints": [
     "static/css/main.f51d5156.css",
-    "static/js/main.17529b1f.js"
+    "static/js/main.0fc792a9.js"
   ]
 }
