@@ -187,12 +187,12 @@ const convertToReactNative = (content: string, item: SvgItem) => {
   import React, { FC } from 'react';
   import { Svg, ${importText} } from 'react-native-svg';
   
-  import { IconSvgProps } from 'global';
+  import type { IconProps } from 'components/icons';
   
-  const ${IconName}Icon: FC<IconSvgProps> = (props: IconSvgProps) => {
-    const { size, svgStyle, ...rest } = props;
+  const ${IconName}Icon: FC<IconProps> = (props: IconProps) => {
+    const { size, tintColor, tintColor2, ...rest } = props;
   
-    return <Svg width={size} height={size} fill="none" style={svgStyle} {...rest}>
+    return <Svg width={size} height={size} fill="none" {...rest}>
       ${inner}
     </Svg>;
   };
@@ -200,6 +200,7 @@ const convertToReactNative = (content: string, item: SvgItem) => {
   ${IconName}Icon.defaultProps = {
     size: 32,
     tintColor: 'white',
+    tintColor2: 'white',
   };
 
   export default ${IconName}Icon;
