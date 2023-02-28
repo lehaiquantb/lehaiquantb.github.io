@@ -7,6 +7,7 @@ import { PageWrapper } from 'app/components/PageWrapper';
 import { GradientChart } from './Features/victory/gradient-chart';
 import { VictoryChartCustom } from './Features/victory/victory-chart';
 import { ConvertSvgReactNative } from './Features/svgr/convert-svg-rn';
+import { CandleChart } from './Features/victory/CandleChart';
 const data = [
   { x: 1, y: 25 },
   { x: 2, y: 10 },
@@ -39,6 +40,7 @@ export function HomePage() {
       <PageWrapper style={{ height: '100%' }}>
         {/* <GradientChart data={data} /> */}
         {/* <VictoryChartCustom /> */}
+        <CandleChart />
         <ConvertSvgReactNative />
         {/* <Masthead />
         <Features /> */}
