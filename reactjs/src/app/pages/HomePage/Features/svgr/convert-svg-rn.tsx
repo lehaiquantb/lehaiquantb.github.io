@@ -10,6 +10,9 @@ import { javascript } from '@codemirror/lang-javascript';
 import { uniqueId } from 'lodash';
 import prettier from 'prettier';
 import prettierPlugin from 'prettier/parser-babel';
+import JsZip from 'jszip';
+import { saveAs } from 'file-saver';
+import { capitalizeFirstLetter } from 'styles/theme/utils';
 // const svgCode = `
 // <svg xmlns="http://www.w3.org/2000/svg"
 //   xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -299,6 +302,9 @@ export const ConvertSvgReactNative = () => {
     // console.log('go convert');
 
     for (const item of items) {
+      if (!item.rawText) {
+        continue;
+      }
       const json: any = {
         code: item.rawText,
         option: {
@@ -397,15 +403,50 @@ export const ConvertSvgReactNative = () => {
           rawText: '',
           resultText: '',
           file,
-          name: file?.name?.split('.')?.[0]?.replaceAll(' ', '') ?? '',
+          name:
+            capitalizeFirstLetter(
+              file?.name?.split('.')?.[0]?.replaceAll(' ', ''),
+            ) ?? '',
         });
       }
     }
     setItems(is?.slice());
   };
 
+  const fileName = (item: SvgItem) => {
+    return `${item?.name?.replaceAll(' ', '')}Icon.tsx`;
+  };
+
+  const onDownloadAll = () => {
+    const zip = new JsZip();
+    const folder = zip.folder('svgs');
+    for (const item of items) {
+      if (item.resultText) {
+        folder?.file(fileName(item), item.resultText);
+      }
+    }
+    zip.generateAsync({ type: 'blob' }).then(content => {
+      saveAs(content, 'svgs.zip');
+    });
+  };
+
+  const onDownload = (item: SvgItem) => {
+    const element = document.createElement('a');
+    const file = new Blob([item.resultText], {
+      type: 'text/plain',
+    });
+    element.href = URL.createObjectURL(file);
+    element.download = fileName(item);
+    document.body.appendChild(element); // Required for this to work in FireFox
+    element.click();
+  };
+
   return (
     <div>
+      <div>
+        <button onClick={onDownloadAll}>Download All</button>
+      </div>
+
       <input
         type="file"
         ref={fileRef}
@@ -433,23 +474,7 @@ export const ConvertSvgReactNative = () => {
                 onChange={e => onChangeName(item.id, e)}
               />
               {!!item.resultText && (
-                <button
-                  onClick={() => {
-                    const element = document.createElement('a');
-                    const file = new Blob([item.resultText], {
-                      type: 'text/plain',
-                    });
-                    element.href = URL.createObjectURL(file);
-                    element.download = `${item.name?.replaceAll(
-                      ' ',
-                      '',
-                    )}Icon.tsx`;
-                    document.body.appendChild(element); // Required for this to work in FireFox
-                    element.click();
-                  }}
-                >
-                  Download
-                </button>
+                <button onClick={() => onDownload(item)}>Download</button>
               )}
             </div>
           );

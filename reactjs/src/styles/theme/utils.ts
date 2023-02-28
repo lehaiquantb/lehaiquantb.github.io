@@ -15,3 +15,8 @@ export function getThemeFromStorage(): ThemeKeyType | null {
     ? (localStorage.getItem('selectedTheme') as ThemeKeyType) || null
     : null;
 }
+
+//capitalize only the first letter of the string.
+export function capitalizeFirstLetter(string?: string) {
+  return string?.length ? string.charAt(0).toUpperCase() + string.slice(1) : '';
+}
