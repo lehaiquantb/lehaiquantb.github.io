@@ -8,6 +8,7 @@ import { GradientChart } from './Features/victory/gradient-chart';
 import { VictoryChartCustom } from './Features/victory/victory-chart';
 import { ConvertSvgReactNative } from './Features/svgr/convert-svg-rn';
 import { CandleChart } from './Features/victory/CandleChart';
+import { Editor } from './Features/editor/Editor';
 const data = [
   { x: 1, y: 25 },
   { x: 2, y: 10 },
@@ -42,6 +43,7 @@ export function HomePage() {
         {/* <VictoryChartCustom /> */}
         <CandleChart />
         <ConvertSvgReactNative />
+        <Editor />
         {/* <Masthead />
         <Features /> */}
       </PageWrapper>

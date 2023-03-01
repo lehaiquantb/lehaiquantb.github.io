@@ -232,12 +232,13 @@ export const CandleChart = () => {
             <VictoryLabel textAnchor="end" dx={-57} dy={-10} />
           }
         />
-        <VictoryAxis
+        {/* <VictoryAxis
           tickValues={[]}
           maxDomain={{ x: 1677574620000 }}
           minDomain={{ x: 1677573480000 }}
           y={15}
-        />
+        /> */}
+        <VictoryAxis tickValues={[]} offsetY={200} />
         <VictoryGroup>
           <VictoryCandlestick
             data={candleStickData}

@@ -5,8 +5,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { EditorView, basicSetup } from 'codemirror';
-import { javascript } from '@codemirror/lang-javascript';
+
 import { uniqueId } from 'lodash';
 import prettier from 'prettier';
 import prettierPlugin from 'prettier/parser-babel';
@@ -266,7 +265,6 @@ export const ConvertSvgReactNative = () => {
     console.log('items', items);
   }, [items]);
 
-  const editorView = useRef<EditorView>();
   const fileRef = useRef<HTMLInputElement>(null);
   const len = useRef<number>(0);
   const [idMapText, setIdMapText] = useState<{ [key in string]: string }>({});
@@ -288,15 +286,6 @@ export const ConvertSvgReactNative = () => {
       setItems(clone);
     }
   }, [idMapText, items]);
-
-  useEffect(() => {
-    if (!editorView.current) {
-      editorView.current = new EditorView({
-        extensions: [basicSetup, javascript()],
-        parent: document.body,
-      });
-    }
-  }, []);
 
   const onConvert = () => {
     // console.log('go convert');
@@ -454,7 +443,6 @@ export const ConvertSvgReactNative = () => {
         itemType="svg"
         onChange={onFileChange}
       />
-      <div id="editor"></div>
       <button onClick={onConvert}>Convert</button>
       <div>
         {items.map(item => {
