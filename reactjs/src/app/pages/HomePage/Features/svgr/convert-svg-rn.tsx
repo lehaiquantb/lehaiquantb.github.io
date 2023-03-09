@@ -1,6 +1,7 @@
 import React, {
   ChangeEvent,
   ChangeEventHandler,
+  MutableRefObject,
   useEffect,
   useRef,
   useState,
@@ -12,6 +13,7 @@ import prettierPlugin from 'prettier/parser-babel';
 import JsZip from 'jszip';
 import { saveAs } from 'file-saver';
 import { capitalizeFirstLetter } from 'styles/theme/utils';
+import { Editor, IEditor } from '../editor/Editor';
 // const svgCode = `
 // <svg xmlns="http://www.w3.org/2000/svg"
 //   xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -21,6 +23,10 @@ import { capitalizeFirstLetter } from 'styles/theme/utils';
 // `;
 
 const converters = [
+  {
+    key: 'clipPath',
+    value: 'ClipPath',
+  },
   {
     key: 'path',
     value: 'Path',
@@ -141,6 +147,46 @@ const converters = [
     key: 'feDistantLight',
     value: 'FeDistantLight',
   },
+  {
+    key: 'feFlood',
+    value: 'FeFlood',
+  },
+  {
+    key: 'feFuncA',
+    value: 'FeFuncA',
+  },
+  {
+    key: 'feFuncB',
+    value: 'FeFuncB',
+  },
+  {
+    key: 'feFuncG',
+    value: 'FeFuncG',
+  },
+  {
+    key: 'feFuncR',
+    value: 'FeFuncR',
+  },
+  {
+    key: 'feGaussianBlur',
+    value: 'FeGaussianBlur',
+  },
+  {
+    key: 'feImage',
+    value: 'FeImage',
+  },
+  {
+    key: 'feMerge',
+    value: 'FeMerge',
+  },
+  {
+    key: 'feMergeNode',
+    value: 'FeMergeNode',
+  },
+  {
+    key: 'feMorphology',
+    value: 'FeMorphology',
+  },
 ];
 
 export const SvgImage = ({ text }) => {
@@ -157,6 +203,7 @@ type SvgItem = {
   resultText: string;
   file: File;
   name: string;
+  // editorRef: React.RefObject<IEditor>;
 };
 
 const convertToReactNative = (content: string, item: SvgItem) => {
@@ -269,6 +316,7 @@ export const ConvertSvgReactNative = () => {
   const len = useRef<number>(0);
   const [idMapText, setIdMapText] = useState<{ [key in string]: string }>({});
   const isMap = useRef<boolean>(false);
+  const editorRefs = useRef<{ [key in string]: MutableRefObject<IEditor> }>({});
 
   useEffect(() => {
     // console.log('idMap', idMapText);
@@ -386,6 +434,8 @@ export const ConvertSvgReactNative = () => {
             return { ...current, [id]: text };
           });
         };
+        // const editorRef = useRef<IEditor>(null).current;
+        // editorRefs.current[id] = editorRef;
 
         is.push({
           id,
@@ -396,6 +446,7 @@ export const ConvertSvgReactNative = () => {
             capitalizeFirstLetter(
               file?.name?.split('.')?.[0]?.replaceAll(' ', ''),
             ) ?? '',
+          // editorRef,
         });
       }
     }
@@ -464,6 +515,7 @@ export const ConvertSvgReactNative = () => {
               {!!item.resultText && (
                 <button onClick={() => onDownload(item)}>Download</button>
               )}
+              <div>{/* <Editor /> */}</div>
             </div>
           );
         })}

@@ -2,5 +2,6 @@
 . "$(dirname "$0")/_/husky.sh"
 
 yarn checkTs
+yarn build
 yarn lint-staged
 

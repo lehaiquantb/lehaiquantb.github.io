@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useImperativeHandle, useRef } from 'react';
 import { EditorView, basicSetup } from 'codemirror';
 import { javascript } from '@codemirror/lang-javascript';
 type KeyItem = {
@@ -7,17 +7,45 @@ type KeyItem = {
 };
 const results: KeyItem[] = [];
 
-export const Editor = () => {
+type Props = {
+  defaultText?: string;
+  editorRef?: React.MutableRefObject<IEditor>;
+};
+
+export type IEditor = {
+  resetText: (text: string) => void;
+};
+
+export const Editor = (props: Props) => {
+  const { defaultText, editorRef } = props;
   const editorView = useRef<EditorView>();
+  const editorId = useRef<string>(`editor-${Date.now()}`);
 
   useEffect(() => {
     if (!editorView.current) {
       editorView.current = new EditorView({
         extensions: [basicSetup, javascript()],
-        parent: document.body,
+        parent: document.getElementById(editorId.current) as any,
       });
     }
+    setText(defaultText ?? '');
   }, []);
+
+  useImperativeHandle(editorRef, () => ({
+    resetText: (text: string) => {
+      setText(text);
+    },
+  }));
+
+  const setText = (text: string) => {
+    editorView.current?.dispatch({
+      changes: {
+        from: 0,
+        to: editorView.current.state.doc.length,
+        insert: text,
+      },
+    });
+  };
 
   const spreadObject = (nestedObject: any, prevKey?: string) => {
     if (typeof nestedObject !== 'object') {
@@ -103,8 +131,8 @@ export const Editor = () => {
 
   return (
     <div>
-      <h1>Editor</h1>
-      <div id="editor"></div>
+      {/* <h1>Editor</h1> */}
+      <div id={editorId.current}></div>
       <button onClick={onConvert}>Convert</button>
     </div>
   );
