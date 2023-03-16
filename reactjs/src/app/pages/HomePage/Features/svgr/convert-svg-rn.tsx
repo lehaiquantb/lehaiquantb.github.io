@@ -14,6 +14,9 @@ import JsZip from 'jszip';
 import { saveAs } from 'file-saver';
 import { capitalizeFirstLetter } from 'styles/theme/utils';
 import { Editor, IEditor } from '../editor/Editor';
+import { Helmet } from 'react-helmet-async';
+const isValidVariable = require('is-valid-var-name').es5;
+
 // const svgCode = `
 // <svg xmlns="http://www.w3.org/2000/svg"
 //   xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -21,6 +24,9 @@ import { Editor, IEditor } from '../editor/Editor';
 //     style="stroke:#ff0000; fill: #0000ff"/>
 // </svg>
 // `;
+
+// global variable ejs from ejs.min.js
+declare var ejs: typeof import('ejs');
 
 const converters = [
   {
@@ -189,6 +195,64 @@ const converters = [
   },
 ];
 
+const ejsTemplates = [
+  `import React, { FC } from 'react';
+  import { Svg, <%- svgImport%> } from 'react-native-svg';
+  
+  import type { IconProps } from 'components/icons';
+  
+  const <%- iconName %>Icon: FC<IconProps> = (props: IconProps) => {
+    const { size, tintColor, tintColor2, ...rest } = props;
+  
+    return <Svg width={size} height={size} fill="none" {...rest}>
+    <%- innerSvg %>
+    </Svg>;
+  };
+  
+  <%- iconName %>Icon.defaultProps = {
+    size: 32,
+    tintColor: 'white',
+    tintColor2: 'white',
+  };
+
+  export default <%- iconName %>Icon;`,
+
+  `
+  import { Svg, <%- svgImport%> } from 'react-native-svg';
+
+  import type { IconProps } from 'components/icons';
+  
+  const <%- iconName %>Icon = ({ size, ...rest }: IconProps) => (
+    <Svg width={size} height={size} viewBox="0 0 32 32" fill="none" {...rest}>
+    <%- innerSvg %>
+    </Svg>
+  );
+  
+  export default <%- iconName %>Icon;
+  `,
+  `
+  import React, { FC } from 'react';
+  import { Svg, <%- svgImport%> } from 'react-native-svg';
+  
+  import { IconSvgProps } from '';
+  
+  const <%- iconName %>Icon: FC<IconSvgProps> = (props: IconSvgProps) => {
+    const { size, ...rest } = props;
+  
+    return <Svg width={size} height={size} fill="none" {...rest}>
+    <%- innerSvg %>
+    </Svg>;
+  };
+  
+  <%- iconName %>Icon.defaultProps = {
+    size: 32,
+    tintColor: 'white',
+  };
+
+  export default <%- iconName %>Icon;
+  `,
+];
+
 export const SvgImage = ({ text }) => {
   return (
     <div style={{ backgroundColor: 'black', width: '40px' }}>
@@ -206,92 +270,76 @@ type SvgItem = {
   // editorRef: React.RefObject<IEditor>;
 };
 
+const getIconName = (name: string) => {
+  const iconName = name?.trim()?.replaceAll(' ', '')?.toUpperCase() ?? '';
+  return isValidVariable(iconName) ? iconName : `_${iconName}`;
+};
+
+const getFileName = (name?: string) => {
+  const fileName =
+    capitalizeFirstLetter(
+      name?.split('.')?.[0]?.replaceAll(' ', ''),
+    )?.toUpperCase() ?? '';
+  return isValidVariable(fileName) ? fileName : `_${fileName}`;
+};
+
 const convertToReactNative = (content: string, item: SvgItem) => {
-  const existTags: string[] = [];
-  // console.log('content', content);
-  // debugger;
-  let inner = content
-    .split(new RegExp(`<svg[^>]*>`, 'g'))?.[1]
-    ?.split('</svg>')?.[0];
-  // console.log('inner', inner);
+  try {
+    const existTags: string[] = [];
+    let innerSvg = content
+      .split(new RegExp(`<svg[^>]*>`, 'g'))?.[1]
+      ?.split('</svg>')?.[0];
+    // console.log('inner', inner);
 
-  if (!inner) {
-    return;
-  }
-
-  converters.forEach(converter => {
-    const reg = new RegExp(`<${converter.key}`, 'g');
-    const reg2 = new RegExp(`</${converter.key}>`, 'g');
-    if (inner.match(reg) || inner.match(reg2)) {
-      existTags.push(converter.value);
+    if (!innerSvg) {
+      return;
     }
-    inner = inner?.replace(reg, `<${converter.value}`);
-    inner = inner?.replace(reg2, `</${converter.value}>`);
-  });
 
-  const importText = existTags.join(', ');
-  const IconName = item?.name?.trim()?.replaceAll(' ', '') ?? '';
+    converters.forEach(converter => {
+      const reg = new RegExp(`<${converter.key}`, 'g');
+      const reg2 = new RegExp(`</${converter.key}>`, 'g');
+      if (innerSvg.match(reg) || innerSvg.match(reg2)) {
+        existTags.push(converter.value);
+      }
+      innerSvg = innerSvg?.replace(reg, `<${converter.value}`);
+      innerSvg = innerSvg?.replace(reg2, `</${converter.value}>`);
+    });
 
-  const template1 = `
-  import React, { FC } from 'react';
-  import { Svg, ${importText} } from 'react-native-svg';
-  
-  import type { IconProps } from 'components/icons';
-  
-  const ${IconName}Icon: FC<IconProps> = (props: IconProps) => {
-    const { size, tintColor, tintColor2, ...rest } = props;
-  
-    return <Svg width={size} height={size} fill="none" {...rest}>
-      ${inner}
-    </Svg>;
-  };
-  
-  ${IconName}Icon.defaultProps = {
-    size: 32,
-    tintColor: 'white',
-    tintColor2: 'white',
-  };
+    const svgImport = existTags.join(', ');
 
-  export default ${IconName}Icon;
-  `;
+    // iconName
+    // const iconName = item?.name?.trim()?.replaceAll(' ', '') ?? '';
 
-  const template2 = `
-  import React, { FC } from 'react';
-  import { Svg, ${importText} } from 'react-native-svg';
-  
-  import { IconSvgProps } from '';
-  
-  const ${IconName}Icon: FC<IconSvgProps> = (props: IconSvgProps) => {
-    const { size, ...rest } = props;
-  
-    return <Svg width={size} height={size} fill="none" {...rest}>
-      ${inner}
-    </Svg>;
-  };
-  
-  ${IconName}Icon.defaultProps = {
-    size: 32,
-    tintColor: 'white',
-  };
+    const iconName = getIconName(item?.name);
 
-  export default ${IconName}Icon;
-  `;
+    const template = ejsTemplates?.[1];
+    const textResult = ejs.render(
+      template,
+      {
+        svgImport,
+        iconName,
+        innerSvg,
+      },
+      { client: true },
+    );
+    const text = prettier.format(textResult, {
+      arrowParens: 'avoid',
+      bracketSameLine: false,
+      bracketSpacing: true,
+      singleQuote: true,
+      trailingComma: 'all',
+      printWidth: 100,
+      tabWidth: 2,
+      useTabs: false,
+      endOfLine: 'auto',
+      parser: 'babel',
+      plugins: [prettierPlugin],
+    });
 
-  const text = prettier.format(template1, {
-    arrowParens: 'avoid',
-    bracketSameLine: false,
-    bracketSpacing: true,
-    singleQuote: true,
-    trailingComma: 'all',
-    printWidth: 100,
-    tabWidth: 2,
-    useTabs: false,
-    endOfLine: 'auto',
-    parser: 'babel',
-    plugins: [prettierPlugin],
-  });
-
-  return text;
+    return text;
+  } catch (error) {
+    console.log('convertToReactNative', error);
+  }
 };
 
 export const ConvertSvgReactNative = () => {
@@ -305,12 +353,27 @@ export const ConvertSvgReactNative = () => {
   //   // console.log(jsCode);
   // }, []);
 
+  const [copyCode, setCopyCode] = useState<string>('');
   const [items, setItems] = useState<SvgItem[]>([]);
   // console.log(items);
 
   useEffect(() => {
     console.log('items', items);
   }, [items]);
+
+  useEffect(() => {
+    // debugger;
+    // const textResult = ejs.render(
+    //   ejsTemplates?.[0],
+    //   {
+    //     svgImport: 'Svg, Path',
+    //     iconName: 'A',
+    //     innerSvg: 'B',
+    //   },
+    //   { client: true },
+    // );
+    // console.log('textResult', textResult);
+  }, []);
 
   const fileRef = useRef<HTMLInputElement>(null);
   const len = useRef<number>(0);
@@ -337,7 +400,6 @@ export const ConvertSvgReactNative = () => {
 
   const onConvert = () => {
     // console.log('go convert');
-
     for (const item of items) {
       if (!item.rawText) {
         continue;
@@ -391,6 +453,16 @@ export const ConvertSvgReactNative = () => {
         // prettier
 
         result &&
+          setCopyCode(prev => {
+            const newCode =
+              prev +
+              `export { default as ${item.name}Icon } from './${item.name}Icon';`;
+            console.log('newCode', newCode);
+
+            return newCode;
+          });
+
+        result &&
           setItems(items => {
             const clone = [...items];
             // console.log('onConvert', clone);
@@ -442,10 +514,7 @@ export const ConvertSvgReactNative = () => {
           rawText: '',
           resultText: '',
           file,
-          name:
-            capitalizeFirstLetter(
-              file?.name?.split('.')?.[0]?.replaceAll(' ', ''),
-            ) ?? '',
+          name: getFileName(file.name),
           // editorRef,
         });
       }
@@ -483,6 +552,12 @@ export const ConvertSvgReactNative = () => {
 
   return (
     <div>
+      <Helmet>
+        <script
+          src={`${process.env.PUBLIC_URL}/ejs.min.js`}
+          type="text/javascript"
+        ></script>
+      </Helmet>
       <div>
         <button onClick={onDownloadAll}>Download All</button>
       </div>
@@ -519,6 +594,9 @@ export const ConvertSvgReactNative = () => {
             </div>
           );
         })}
+      </div>
+      <div>
+        <code>{copyCode ?? ''}</code>
       </div>
     </div>
   );
