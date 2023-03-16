@@ -1,7 +1,8 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
+
 cd reactjs
-pwd
-# yarn checkTs
-# yarn build
-# yarn lint-staged
+yarn checkTs
+yarn build
+git add .
+yarn lint-staged

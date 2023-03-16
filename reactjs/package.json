@@ -87,7 +87,7 @@
     "cleanAndSetup": "ts-node ./internals/scripts/clean.ts",
     "prettify": "prettier --write",
     "extract-messages": "i18next-scanner --config=internals/extractMessages/i18next-scanner.config.js",
-    "postinstall": "cd .. && husky install reactjs/.husky"
+    "prepare": "cd .. && husky install reactjs/.husky"
   },
   "eslintConfig": {
     "extends": "react-app"
