@@ -195,6 +195,8 @@ const converters = [
   },
 ];
 
+const svgTagValues = converters.map(item => item.value);
+
 const ejsTemplates = [
   `import React, { FC } from 'react';
   import { Svg, <%- svgImport%> } from 'react-native-svg';
@@ -283,7 +285,7 @@ const getFileName = (name?: string) => {
   return isValidVariable(fileName) ? fileName : `_${fileName}`;
 };
 
-const convertToReactNative = (content: string, item: SvgItem) => {
+const convertFromSvg = (content: string, item: SvgItem) => {
   try {
     const existTags: string[] = [];
     let innerSvg = content
@@ -305,6 +307,60 @@ const convertToReactNative = (content: string, item: SvgItem) => {
       innerSvg = innerSvg?.replace(reg2, `</${converter.value}>`);
     });
 
+    const svgImport = existTags.join(', ');
+
+    // iconName
+    // const iconName = item?.name?.trim()?.replaceAll(' ', '') ?? '';
+
+    const iconName = getIconName(item?.name);
+
+    const template = ejsTemplates?.[1];
+    const textResult = ejs.render(
+      template,
+      {
+        svgImport,
+        iconName,
+        innerSvg,
+      },
+      { client: true },
+    );
+    const text = prettier.format(textResult, {
+      arrowParens: 'avoid',
+      bracketSameLine: false,
+      bracketSpacing: true,
+      singleQuote: true,
+      trailingComma: 'all',
+      printWidth: 100,
+      tabWidth: 2,
+      useTabs: false,
+      endOfLine: 'auto',
+      parser: 'babel',
+      plugins: [prettierPlugin],
+    });
+
+    return text;
+  } catch (error) {
+    console.log('convertToReactNative', error);
+  }
+};
+
+const convertFromSvgNative = (content: string, item: SvgItem) => {
+  try {
+    const existTags: string[] = [];
+    let innerSvg = content
+      .split(new RegExp(`<Svg[^>]*>`, 'g'))?.[1]
+      ?.split('</Svg>')?.[0];
+    // console.log('inner', inner);
+
+    if (!innerSvg) {
+      return;
+    }
+
+    svgTagValues.forEach(tag => {
+      if (innerSvg?.includes(`<${tag} `)) {
+        existTags.push(tag);
+      }
+    });
     const svgImport = existTags.join(', ');
 
     // iconName
@@ -406,7 +462,7 @@ export const ConvertSvgReactNative = () => {
       }
       const json: any = {
         code: item.rawText,
-        option: {
+        options: {
           icon: false,
           native: true,
           typescript: true,
@@ -449,7 +505,7 @@ export const ConvertSvgReactNative = () => {
         const content: string = (await rawResponse.json())?.output ?? '';
         // debugger;
 
-        const result = convertToReactNative(content, item);
+        const result = convertFromSvgNative(content, item);
         // prettier
 
         result &&
