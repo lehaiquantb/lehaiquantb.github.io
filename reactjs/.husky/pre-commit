@@ -4,5 +4,7 @@
 cd reactjs
 yarn checkTs
 yarn build
+cd ..
 git add .
+cd reactjs
 yarn lint-staged
