@@ -357,7 +357,7 @@ const convertFromSvgNative = (content: string, item: SvgItem) => {
     }
 
     svgTagValues.forEach(tag => {
-      if (innerSvg?.includes(`<${tag} `)) {
+      if (innerSvg?.includes(`<${tag} `) || innerSvg?.includes(`<${tag}>`)) {
         existTags.push(tag);
       }
     });
