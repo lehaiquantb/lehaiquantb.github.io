@@ -5025,6 +5025,11 @@ csstype@^3.0.2:
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.1.1.tgz#841b532c45c758ee546a11d5bd7b7b473c8c30b9"
   integrity sha512-DJR/VvkAvSZW9bTouZue2sSxDwdTN92uHjqeKVm+0dAqdfNykRzQ95tay8aXMBAAPpUiq4Qcug2L7neoRh2Egw==
 
+curvereduce@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/curvereduce/-/curvereduce-1.0.0.tgz#d38be629b928ef4b4fc041ad74fe2371e473ce6c"
+  integrity sha512-jdFme73fw8eXp6i+IG2fexGOjKnbfJlyqeC5Pf5nb0IhbNd95UN274QbyhDcVS5HgOk2opgN3e0nE+qpknsrug==
+
 "d3-array@2 - 3", "d3-array@2.10.0 - 3", d3-array@^3.1.6:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/d3-array/-/d3-array-3.2.1.tgz#39331ea706f5709417d31bbb6ec152e0328b39b3"
@@ -12534,6 +12539,11 @@ simple-swizzle@^0.2.2:
   integrity sha512-JA//kQgZtbuY83m+xT+tXJkmJncGMTFT+C+g2h2R9uxkYIrE2yy9sgmcLhCnw57/WSD+Eh3J97FPEDFnbXnDUg==
   dependencies:
     is-arrayish "^0.3.1"
+
+simplify-geometry@0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/simplify-geometry/-/simplify-geometry-0.0.2.tgz#63797e676eae96835ace02bcd27d3e1af544f49c"
+  integrity sha512-ZEyrplkqgCqDlL7V8GbbYgTLlcnNF+MWWUdy8s8ZeJru50bnI71rDew/I+HG36QS2mPOYAq1ZjwNXxHJ8XOVBw==
 
 sisteransi@^1.0.5:
   version "1.0.5"

@@ -9,6 +9,7 @@ import { VictoryChartCustom } from './Features/victory/victory-chart';
 import { ConvertSvgReactNative } from './Features/svgr/convert-svg-rn';
 import { CandleChart } from './Features/victory/CandleChart';
 import { Editor } from './Features/editor/Editor';
+import { ColumnChart } from './Features/victory/ColumnChart';
 const data = [
   { x: 1, y: 25 },
   { x: 2, y: 10 },
@@ -41,7 +42,7 @@ export function HomePage() {
       <PageWrapper style={{ height: '100%' }}>
         {/* <GradientChart data={data} /> */}
         {/* <VictoryChartCustom /> */}
-        <CandleChart />
+        <ColumnChart />
         <ConvertSvgReactNative />
         <Editor />
         {/* <Masthead />
