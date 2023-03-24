@@ -20,3 +20,17 @@ export function getThemeFromStorage(): ThemeKeyType | null {
 export function capitalizeFirstLetter(string?: string) {
   return string?.length ? string.charAt(0).toUpperCase() + string.slice(1) : '';
 }
+
+export function readTextFromFile(file: File) {
+  return new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsText(file);
+    reader.onloadend = pr => {
+      if (pr?.target?.result) {
+        resolve(pr.target.result as string);
+      } else {
+        reject(new Error('FileReader failed to read file'));
+      }
+    };
+  });
+}
