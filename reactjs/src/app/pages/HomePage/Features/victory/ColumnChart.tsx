@@ -54,7 +54,7 @@ const results = simplifyJS(points, 25, true);
 // console.log('[sampleHistogramData.length]', results?.length);
 export const ColumnChart: FC<Props> = (props: Props) => {
   const { ...rest } = props;
-  const [undulations, setUndulations] = useState<Point[]>([{ x: 0, y: 0 }]);
+  const [undulations, setUndulations] = useState<Point[]>(_arrs);
   const [tolarence, setTolarence] = useState<number>(25);
 
   const uploadProps: UploadProps = {
