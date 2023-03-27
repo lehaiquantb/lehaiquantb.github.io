@@ -62,11 +62,20 @@ export const ColumnChart: FC<Props> = (props: Props) => {
     async onChange(info) {
       const text = await info.file.originFileObj?.text();
       const undulation = JSON.parse(text || '{}');
-      const _u =
-        undulation?.attention?.map((item, index) => ({
-          x: item.start,
-          y: item.level,
-        })) ?? [];
+      let _u: Point[];
+      if (undulation?.attention?.length) {
+        _u =
+          undulation?.attention?.map((item, index) => ({
+            x: item.start,
+            y: item.level,
+          })) ?? [];
+      } else {
+        _u = Object.keys(undulation).map(key => ({
+          x: Number(undulation[key]?.[0]),
+          y: undulation[key]?.[1],
+        }));
+      }
+
       setUndulations(_u);
       // if (info.file.status !== 'uploading') {
       //   console.log(info.file, info.fileList);
