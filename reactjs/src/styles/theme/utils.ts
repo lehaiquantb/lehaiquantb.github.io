@@ -34,3 +34,11 @@ export function readTextFromFile(file: File) {
     };
   });
 }
+
+export const parseJson = (data: any): Record<string, any> | undefined => {
+  try {
+    return JSON.parse(data);
+  } catch (error) {
+    return undefined;
+  }
+};

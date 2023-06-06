@@ -10,6 +10,7 @@ import { ConvertSvgReactNative } from './Features/svgr/convert-svg-rn';
 import { CandleChart } from './Features/victory/CandleChart';
 import { Editor } from './Features/editor/Editor';
 import { ColumnChart } from './Features/victory/ColumnChart';
+import { ConvertImageBase64 } from './Features/tools/ConvertImageBase64';
 const data = [
   { x: 1, y: 25 },
   { x: 2, y: 10 },
@@ -45,6 +46,7 @@ export function HomePage() {
         <ColumnChart />
         <ConvertSvgReactNative />
         <Editor />
+        <ConvertImageBase64 />
         {/* <Masthead />
         <Features /> */}
       </PageWrapper>

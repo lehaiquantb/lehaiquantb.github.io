@@ -89,7 +89,7 @@ export const ColumnChart: FC<Props> = (props: Props) => {
   };
 
   const undulationsResult = useMemo(() => {
-    return simplifyJS(undulations, tolarence, true);
+    return simplifyJS(undulations, 1, true);
   }, [undulations, tolarence]);
   console.log('UNDULATIONS', undulations);
   console.log('RESULTS', undulationsResult);
@@ -110,6 +110,10 @@ export const ColumnChart: FC<Props> = (props: Props) => {
     // console.log('sampleHistogramData', results);
   }, []);
 
+  const undulationsResultAfter = useMemo(() => {
+    return simplifyJS(undulationsResult, tolarence, true);
+  }, [tolarence, undulationsResult]);
+
   return (
     <div style={{ marginTop: 100, marginBottom: 100 }}>
       <div>
@@ -121,6 +125,7 @@ export const ColumnChart: FC<Props> = (props: Props) => {
         <InputNumber defaultValue={25} onChange={setTolarence as any} />
         <Tag>{`From: ${undulations.length}`}</Tag>
         <Tag>{`To: ${undulationsResult.length}`}</Tag>
+        <Tag>{`To 2: ${undulationsResultAfter.length}`}</Tag>
       </div>
       <div style={{ marginTop: 30, marginBottom: 30 }}>
         <VictoryBar
@@ -138,6 +143,16 @@ export const ColumnChart: FC<Props> = (props: Props) => {
             data: { fill: '#c43a31' },
           }}
           data={undulationsResult}
+          //   bins={[0, 3, 7, 10]}
+          //   bins={5}
+        />
+        <br />
+        <VictoryBar
+          height={30}
+          style={{
+            data: { fill: '#c43a31' },
+          }}
+          data={undulationsResultAfter}
           //   bins={[0, 3, 7, 10]}
           //   bins={5}
         />
