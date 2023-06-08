@@ -11,6 +11,11 @@ import { CandleChart } from './Features/victory/CandleChart';
 import { Editor } from './Features/editor/Editor';
 import { ColumnChart } from './Features/victory/ColumnChart';
 import { ConvertImageBase64 } from './Features/tools/ConvertImageBase64';
+import { Tabs } from 'antd';
+import type { TabsProps } from 'antd';
+import { DebugDetectFace } from './Features/tools/DebugDetectFace';
+import { CommonTool } from './Features/tools/CommonTool';
+
 const data = [
   { x: 1, y: 25 },
   { x: 2, y: 10 },
@@ -29,6 +34,27 @@ const data = [
   { x: 15, y: 30 },
   { x: 16, y: 10 },
 ];
+
+const onChange = (key: string) => {};
+
+const items: TabsProps['items'] = [
+  {
+    key: '1',
+    label: `Common Tools`,
+    children: <CommonTool />,
+  },
+  {
+    key: '2',
+    label: `Debug Detect Face`,
+    children: <DebugDetectFace />,
+  },
+  {
+    key: '3',
+    label: `Tab 3`,
+    children: `Content of Tab Pane 3`,
+  },
+];
+
 export function HomePage() {
   return (
     <>
@@ -41,12 +67,11 @@ export function HomePage() {
       </Helmet>
       <NavBar />
       <PageWrapper style={{ height: '100%' }}>
+        <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
         {/* <GradientChart data={data} /> */}
         {/* <VictoryChartCustom /> */}
-        <ColumnChart />
-        <ConvertSvgReactNative />
-        <Editor />
-        <ConvertImageBase64 />
+        {/* <ColumnChart /> */}
+
         {/* <Masthead />
         <Features /> */}
       </PageWrapper>

@@ -118,7 +118,9 @@ export const ColumnChart: FC<Props> = (props: Props) => {
     <div style={{ marginTop: 100, marginBottom: 100 }}>
       <div>
         <Upload {...uploadProps}>
-          <Button icon={<UploadOutlined />}>Choose undulation file</Button>
+          <Button icon={<UploadOutlined rev={undefined} />}>
+            Choose undulation file
+          </Button>
         </Upload>
       </div>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
