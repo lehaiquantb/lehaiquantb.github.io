@@ -415,7 +415,7 @@ export const ConvertSvgReactNative = () => {
   // console.log(items);
 
   useEffect(() => {
-    console.log('items', items);
+    // console.log('items', items);
   }, [items]);
 
   useEffect(() => {

@@ -80,8 +80,8 @@
     "web-vitals": "2.1.4"
   },
   "scripts": {
-    "dev": "react-scripts start --port 3333",
-    "start": "react-scripts start --port 3333",
+    "dev": "PORT=2023 react-scripts start",
+    "start": "PORT=2023 react-scripts start",
     "build": "react-scripts build && sh ./bin/build.sh",
     "test": "react-scripts test",
     "eject": "react-scripts eject",

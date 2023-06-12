@@ -1,6 +1,6 @@
 import { io } from 'socket.io-client';
 
-const SOCKET_URI = 'http://192.168.1.8:2000';
+const SOCKET_URI = 'http://172.16.0.57:2000';
 
 export class SocketClient {
   private static instance: SocketClient;
