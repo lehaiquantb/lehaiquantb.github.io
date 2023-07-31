@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/reactjs/build/static/css/main.f51d5156.css",
-    "main.js": "/reactjs/build/static/js/main.77292ce7.js",
-    "static/js/695.1825d13c.chunk.js": "/reactjs/build/static/js/695.1825d13c.chunk.js",
+    "main.js": "/reactjs/build/static/js/main.e2a5b4f9.js",
+    "static/js/695.96027e7b.chunk.js": "/reactjs/build/static/js/695.96027e7b.chunk.js",
     "static/js/27.d932e9b1.chunk.js": "/reactjs/build/static/js/27.d932e9b1.chunk.js",
-    "static/js/385.28e19bfa.chunk.js": "/reactjs/build/static/js/385.28e19bfa.chunk.js",
+    "static/js/758.fa513af0.chunk.js": "/reactjs/build/static/js/758.fa513af0.chunk.js",
     "static/media/github-icon.svg": "/reactjs/build/static/media/github-icon.cc72f0952f8f5179b4c3406bed5fb8cc.svg",
     "index.html": "/reactjs/build/index.html",
     "static/media/documentation-icon.svg": "/reactjs/build/static/media/documentation-icon.29cd96c7190f88435b9e45406422a083.svg"
   },
   "entrypoints": [
     "static/css/main.f51d5156.css",
-    "static/js/main.77292ce7.js"
+    "static/js/main.e2a5b4f9.js"
   ]
 }

@@ -1,4 +1,4 @@
-import { Card, Col, Divider, Row, Tag } from 'antd';
+import { Alert, Button, Card, Col, Divider, Row, Tag } from 'antd';
 import React, { FC, useEffect, useMemo, useState } from 'react';
 import { TimsSocket, socketClient } from 'utils/socket/socket.client';
 type FaceDetectorProps = {
@@ -56,15 +56,21 @@ const ImageBase64 = (props: any) => {
       const _data = data?.data?.data?.data?.data;
       const _requestId = data?.data?.requestId;
       // console.log('apiRes', apiRes);
+      console.log('Response', data);
 
       const problem = apiRes?.problem as PROBLEM_CODE;
-      setStatus(problem);
+      const errorCode = (apiRes?.data as any)?.errors?.[0]?.key ?? 'NOT_FOUND';
+      if (problem === 'CLIENT_ERROR') {
+        setStatus(errorCode);
+      } else {
+        setStatus(problem);
+      }
       // console.log('report-checking-response', _data, requestId, index);
       // eslint-disable-next-line eqeqeq
       if (!problem && requestId == _requestId && !!_data?.length) {
         // debugger;
         const _imgR = _data?.[index ?? 0];
-        console.log('_imgR', _imgR);
+        // console.log('_imgR', _imgR);
 
         setImgRs(_imgR ?? {});
       }
@@ -81,10 +87,6 @@ const ImageBase64 = (props: any) => {
     switch (status) {
       case 'in_progress':
         return <TagFace type="processing">In processing</TagFace>;
-
-      case 'CLIENT_ERROR':
-        return <TagFace type="not-found">Not found</TagFace>;
-
       case null:
       case undefined:
         if (!imgRs?.length) {
@@ -108,7 +110,7 @@ const ImageBase64 = (props: any) => {
           </div>
         );
       default:
-        return <TagFace type="red">Cancel</TagFace>;
+        return <TagFace type="red">{status}</TagFace>;
     }
   }, [status]);
 
@@ -171,9 +173,14 @@ export const FaceDetector: FC<FaceDetectorProps> = (
       </Row>
       <Row align={'middle'}>
         <Col>
-          <span>
-            FOUND USER <b>{detectedUser?.email ?? ''}</b>
-          </span>
+          {!!detectedUser?.email?.length ? (
+            <Alert
+              type="success"
+              message={`FOUND USER => ${detectedUser?.email ?? ''}`}
+            />
+          ) : (
+            ''
+          )}
         </Col>
       </Row>
       <Divider />
@@ -201,7 +208,7 @@ export const DebugDetectFace: FC = () => {
     });
 
     t.onChannel('report-crash', err => {
-      console.log('CRASH', err);
+      console.log('[CRASH]', err);
     });
     return () => {
       t.clear();
@@ -213,11 +220,26 @@ export const DebugDetectFace: FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [detectImages?.length]);
 
+  const onClear = () => {
+    setDetectImages([]);
+  };
+
   return (
     <div>
       {detectImages?.map((detectImage, index) => (
         <FaceDetector key={index} {...detectImage} />
       ))}
+      <Button
+        type="primary"
+        style={{
+          position: 'absolute',
+          top: 0,
+          right: 0,
+        }}
+        onClick={onClear}
+      >
+        Clear
+      </Button>
       <div ref={bottomRef} />
     </div>
   );
