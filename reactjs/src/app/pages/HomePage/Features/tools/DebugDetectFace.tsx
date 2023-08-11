@@ -1,6 +1,8 @@
 import { Alert, Button, Card, Col, Divider, Row, Tag } from 'antd';
 import React, { FC, useEffect, useMemo, useState } from 'react';
 import { TimsSocket, socketClient } from 'utils/socket/socket.client';
+import ReactJson from 'react-json-view';
+import { cloneDeep } from 'lodash';
 type FaceDetectorProps = {
   images: string[];
   requestId: string;
@@ -49,6 +51,8 @@ const ImageBase64 = (props: any) => {
     'in_progress',
   );
 
+  const [res, setRes] = useState<any>({});
+
   useEffect(() => {
     const t = TimsSocket.init();
     t.onChannel('report-checking-response', (data: ExtendSocketData) => {
@@ -60,16 +64,17 @@ const ImageBase64 = (props: any) => {
 
       const problem = apiRes?.problem as PROBLEM_CODE;
       const errorCode = (apiRes?.data as any)?.errors?.[0]?.key ?? 'NOT_FOUND';
-      if (problem === 'CLIENT_ERROR') {
-        setStatus(errorCode);
-      } else {
-        setStatus(problem);
-      }
       // console.log('report-checking-response', _data, requestId, index);
       // eslint-disable-next-line eqeqeq
-      if (!problem && requestId == _requestId && !!_data?.length) {
+      if (requestId == _requestId) {
         // debugger;
-        const _imgR = _data?.[index ?? 0];
+        setRes(cloneDeep(apiRes?.data) ?? {});
+        if (problem === 'CLIENT_ERROR') {
+          setStatus(errorCode);
+        } else {
+          setStatus(problem);
+        }
+        const _imgR = cloneDeep(_data?.[index ?? 0]);
         // console.log('_imgR', _imgR);
 
         setImgRs(_imgR ?? {});
@@ -122,7 +127,12 @@ const ImageBase64 = (props: any) => {
         alt=""
         style={{ width }}
       />
-      <p>{Status}</p>
+      <Row>
+        <Col>{Status}</Col>
+        <Col>
+          <ReactJson src={res} />
+        </Col>
+      </Row>
     </div>
   );
 };
@@ -159,7 +169,7 @@ export const FaceDetector: FC<FaceDetectorProps> = (
       </h3>
       <Row>
         {imageResults?.map((item, index) => (
-          <Col span={6} key={index}>
+          <Col span={12} key={index}>
             <Card>
               <ImageBase64
                 src={item?.src ?? ''}
