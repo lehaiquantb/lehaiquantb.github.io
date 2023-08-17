@@ -1,6 +1,6 @@
 import { io } from 'socket.io-client';
 
-const SOCKET_URI = 'http://172.16.0.57:2000';
+const { REACT_APP_SOCKET_URI: SOCKET_URI } = process.env;
 
 export class SocketClient {
   private static instance: SocketClient;

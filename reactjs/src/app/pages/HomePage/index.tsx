@@ -15,6 +15,8 @@ import { Tabs } from 'antd';
 import type { TabsProps } from 'antd';
 import { DebugDetectFace } from './Features/tools/DebugDetectFace';
 import { CommonTool } from './Features/tools/CommonTool';
+import CheckingStatistic from './Features/tools/CheckingStatistic';
+import TestAiApi from './Features/tools/TestAiApi';
 
 const data = [
   { x: 1, y: 25 },
@@ -45,13 +47,18 @@ const items: TabsProps['items'] = [
   },
   {
     key: '2',
-    label: `Debug Detect Face`,
+    label: `Debug Detect Face Realtime`,
     children: <DebugDetectFace />,
   },
   {
     key: '3',
-    label: `Tab 3`,
-    children: `Content of Tab Pane 3`,
+    label: `Checking Statistic`,
+    children: <CheckingStatistic />,
+  },
+  {
+    key: '4',
+    label: `Test AI API`,
+    children: <TestAiApi />,
   },
 ];
 
