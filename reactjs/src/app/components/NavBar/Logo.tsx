@@ -4,7 +4,7 @@ import styled from 'styled-components/macro';
 export function Logo() {
   return (
     <Wrapper>
-      <Title>Logger</Title>
+      <Title>lehaiquantb.github.io</Title>
       {/* <Description>Create React App Template</Description> */}
     </Wrapper>
   );

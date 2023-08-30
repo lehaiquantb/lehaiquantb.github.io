@@ -50,16 +50,16 @@ const items: TabsProps['items'] = [
     label: `Debug Detect Face Realtime`,
     children: <DebugDetectFace />,
   },
-  {
-    key: '3',
-    label: `Checking Statistic`,
-    children: <CheckingStatistic />,
-  },
-  {
-    key: '4',
-    label: `Test AI API`,
-    children: <TestAiApi />,
-  },
+  // {
+  //   key: '3',
+  //   label: `Checking Statistic`,
+  //   children: <CheckingStatistic />,
+  // },
+  // {
+  //   key: '4',
+  //   label: `Test AI API`,
+  //   children: <TestAiApi />,
+  // },
 ];
 
 export function HomePage() {
