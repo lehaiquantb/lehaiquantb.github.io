@@ -28,6 +28,7 @@
     "codemirror": "6.0.1",
     "cross-env": "7.0.3",
     "curvereduce": "1.0.0",
+    "dayjs": "1.11.10",
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-prettier": "4.2.1",
     "eslint-plugin-react-hooks": "4.6.0",

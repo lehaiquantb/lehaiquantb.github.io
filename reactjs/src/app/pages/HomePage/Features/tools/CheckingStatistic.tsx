@@ -4,6 +4,7 @@ import React, { FC, useEffect, useState } from 'react';
 import useSWR from 'swr';
 import { FaceDetector } from './DebugDetectFace';
 import ReactJson from 'react-json-view';
+import dayjs from 'dayjs';
 const { REACT_APP_LOGGER_BASE_URL } = process.env;
 
 type Props = {};
@@ -73,9 +74,12 @@ const StatisticItem = (item: Item) => {
 };
 
 const CheckingStatistic: FC<Props> = (props: Props) => {
-  const [url, setUrl] = useState(`${REACT_APP_LOGGER_BASE_URL}/checking`);
+  const defaultUrl = `${REACT_APP_LOGGER_BASE_URL}/checking?limit=1000&page=1&orderBy&orderDirection&fromTime=${dayjs()
+    .startOf('D')
+    .toISOString()}&toTime=${dayjs().endOf('D').toISOString()}`;
+  const [url, setUrl] = useState(defaultUrl);
   const { data, error, isLoading, mutate } = useSWR([url], getList);
-  const [url1, setUrl1] = useState(`${REACT_APP_LOGGER_BASE_URL}/checking`);
+  const [url1, setUrl1] = useState(defaultUrl);
 
   useEffect(() => {
     console.log(data?.data?.items);
