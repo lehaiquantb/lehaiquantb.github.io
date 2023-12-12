@@ -3,7 +3,7 @@ import CodeEditor from '../editor/CodeEditor';
 import { useMemo, useState } from 'react';
 import { Card, Col, Row } from 'antd';
 
-export const ConvertHtmlXss = () => {
+export const SanitizeHtmlXss = () => {
   const [text, setText] = useState<string>('');
   const onChange = (value: string | undefined) => {
     setText(value ?? '');
@@ -18,7 +18,7 @@ export const ConvertHtmlXss = () => {
   }, [text]);
   return (
     <div>
-      <h1>ConvertHtmlXss</h1>
+      <h1>SanitizeHtmlXss</h1>
       <div>
         <CodeEditor
           height={400}
