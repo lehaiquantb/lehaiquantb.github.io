@@ -17,6 +17,7 @@ import { DebugDetectFace } from './Features/tools/DebugDetectFace';
 import { CommonTool } from './Features/tools/CommonTool';
 import CheckingStatistic from './Features/tools/CheckingStatistic';
 import TestAiApi from './Features/tools/TestAiApi';
+import { ConvertHtmlXss } from './Features/tools/ConvertHtmlXss';
 
 const data = [
   { x: 1, y: 25 },
@@ -59,6 +60,11 @@ const items: TabsProps['items'] = [
     key: '4',
     label: `Test AI API`,
     children: <TestAiApi />,
+  },
+  {
+    key: '5',
+    label: `Convert to Html avoid Xss`,
+    children: <ConvertHtmlXss />,
   },
 ];
 
