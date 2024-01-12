@@ -1,0 +1,12 @@
+.testui1 {
+    table {
+        .ant-table-thead {
+            th {
+                position: sticky;
+                // top: 100px;
+                top: 0;
+                z-index: 10000;
+            }
+        }
+    }
+}

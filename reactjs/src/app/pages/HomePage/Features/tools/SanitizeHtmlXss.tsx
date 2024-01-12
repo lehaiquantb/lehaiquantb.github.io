@@ -1,7 +1,21 @@
-import xss from 'xss';
+import xss, { IFilterXSSOptions } from 'xss';
 import CodeEditor from '../editor/CodeEditor';
 import { useMemo, useState } from 'react';
 import { Card, Col, Row } from 'antd';
+const XSS_OPTIONS: IFilterXSSOptions = {
+  onTagAttr(tag, name, value, isWhiteAttr) {
+    const allowAttributes = ['class'];
+    const allowRegexAttributes = [/^data-\S+$/g];
+    if (allowAttributes.includes(name)) {
+      return `${name}="${value}"`;
+    }
+    for (const regex of allowRegexAttributes) {
+      if (regex.test(name)) {
+        return `${name}="${value}"`;
+      }
+    }
+  },
+};
 
 export const SanitizeHtmlXss = () => {
   const [text, setText] = useState<string>('');
@@ -11,7 +25,7 @@ export const SanitizeHtmlXss = () => {
 
   const result = useMemo(() => {
     try {
-      return xss(text);
+      return xss(text, XSS_OPTIONS);
     } catch (error) {
       return `Error ${error}`;
     }

@@ -15,6 +15,7 @@ import { GlobalStyle } from 'styles/global-styles';
 import { HomePage } from './pages/HomePage/Loadable';
 import { NotFoundPage } from './pages/NotFoundPage/Loadable';
 import { useTranslation } from 'react-i18next';
+import { TestUI1 } from './pages/TestUI/TestUI1';
 
 export function App() {
   const { i18n } = useTranslation();
@@ -29,6 +30,8 @@ export function App() {
       </Helmet>
 
       <Routes>
+        <Route path="test/ui1" element={<TestUI1 />} />
+
         <Route path="*" element={<HomePage />} />
         {/* <Route path="*" element={<NotFoundPage />} /> */}
       </Routes>

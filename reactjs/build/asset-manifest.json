@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/reactjs/build/static/css/main.f51d5156.css",
-    "main.js": "/reactjs/build/static/js/main.b06520d3.js",
-    "static/js/460.e9d1ed76.chunk.js": "/reactjs/build/static/js/460.e9d1ed76.chunk.js",
+    "main.css": "/reactjs/build/static/css/main.cf54566a.css",
+    "main.js": "/reactjs/build/static/js/main.fe499ee0.js",
+    "static/js/460.9d796a35.chunk.js": "/reactjs/build/static/js/460.9d796a35.chunk.js",
     "static/js/27.d932e9b1.chunk.js": "/reactjs/build/static/js/27.d932e9b1.chunk.js",
-    "static/js/53.e05317b8.chunk.js": "/reactjs/build/static/js/53.e05317b8.chunk.js",
+    "static/js/456.fa062598.chunk.js": "/reactjs/build/static/js/456.fa062598.chunk.js",
     "index.html": "/reactjs/build/index.html"
   },
   "entrypoints": [
-    "static/css/main.f51d5156.css",
-    "static/js/main.b06520d3.js"
+    "static/css/main.cf54566a.css",
+    "static/js/main.fe499ee0.js"
   ]
 }
